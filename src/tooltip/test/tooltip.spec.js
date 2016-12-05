@@ -4,7 +4,7 @@
 describe('tooltip', function() {
 
   var bodyEl = $('body'), sandboxEl;
-  var $rootScope, $compile, $templateCache, $$rAF, $animate, $timeout, $httpBackend, $tooltip, scope;
+  var $rootScope, $compile, $templateCache, $$rAF, $animate, $timeout, $httpBackend, $bsTooltip, scope;
 
   beforeEach(module('ngSanitize'));
   beforeEach(module('ngAnimate'));
@@ -23,7 +23,7 @@ describe('tooltip', function() {
       flush.call($animate); if(!$animate.triggerCallbacks) $timeout.flush();
     };
     $httpBackend = $injector.get('$httpBackend');
-    $tooltip = $injector.get('$tooltip');
+    $bsTooltip = $injector.get('$bsTooltip');
 
     bodyEl.html('');
     sandboxEl = $('<div>').attr('id', 'sandbox').appendTo(bodyEl);
@@ -284,7 +284,7 @@ describe('tooltip', function() {
 
     it('should NOT stopPropagation on mousedown if mouseDownStopPropagation is false', function() {
       var elm = compileDirective('markup-button');
-      var myTooltip = $tooltip(elm, {mouseDownStopPropagation: false, trigger: 'focus'});
+      var myTooltip = $bsTooltip(elm, {mouseDownStopPropagation: false, trigger: 'focus'});
       scope.$digest();
       var evt = jQuery.Event('mousedown');
       spyOn(evt, 'stopPropagation');
@@ -294,7 +294,7 @@ describe('tooltip', function() {
 
     it('should NOT preventDefault on mousedown if mouseDownPreventDefault is false', function() {
       var elm = compileDirective('markup-button');
-      var myTooltip = $tooltip(elm, {mouseDownPreventDefault: false, trigger: 'focus'});
+      var myTooltip = $bsTooltip(elm, {mouseDownPreventDefault: false, trigger: 'focus'});
       scope.$digest();
       var evt = jQuery.Event('mousedown');
       spyOn(evt, 'preventDefault');
@@ -507,7 +507,7 @@ describe('tooltip', function() {
   describe('using service', function() {
 
     it('should correctly open on next digest', function() {
-      var myTooltip = $tooltip(sandboxEl, templates['default'].scope.tooltip);
+      var myTooltip = $bsTooltip(sandboxEl, templates['default'].scope.tooltip);
       scope.$digest();
       expect(bodyEl.children('.tooltip').length).toBe(0);
       myTooltip.show();
@@ -519,7 +519,7 @@ describe('tooltip', function() {
 
     it('should open if option show is true', function() {
       var options = angular.extend({ show: true }, templates['default'].scope.tooltip);
-      var myTooltip = $tooltip(sandboxEl, options);
+      var myTooltip = $bsTooltip(sandboxEl, options);
       scope.$digest();
       $animate.flush();
       expect(bodyEl.children('.tooltip').length).toBe(1);
@@ -530,7 +530,7 @@ describe('tooltip', function() {
     });
 
     it('should do nothing when hiding an already hidden popup', function() {
-      var myTooltip = $tooltip(sandboxEl, templates['default'].scope.tooltip);
+      var myTooltip = $bsTooltip(sandboxEl, templates['default'].scope.tooltip);
       scope.$digest();
       expect(function() {
         myTooltip.hide();
@@ -538,7 +538,7 @@ describe('tooltip', function() {
     });
 
     it('should correctly be destroyed', function() {
-      var myTooltip = $tooltip(sandboxEl, templates['default'].scope.tooltip);
+      var myTooltip = $bsTooltip(sandboxEl, templates['default'].scope.tooltip);
       scope.$digest();
       expect(bodyEl.children('.tooltip').length).toBe(0);
       myTooltip.show();
@@ -550,7 +550,7 @@ describe('tooltip', function() {
 
     it('should correctly work with ngClick', function() {
       var elm = compileDirective('markup-ngClick-service');
-      var myTooltip = $tooltip(sandboxEl, templates['default'].scope.tooltip);
+      var myTooltip = $bsTooltip(sandboxEl, templates['default'].scope.tooltip);
       scope.showTooltip = function() {
         myTooltip.$promise.then(myTooltip.show);
       };
@@ -562,7 +562,7 @@ describe('tooltip', function() {
     it('should correctly work with ngClick with an isolated scope', function() {
       scope = scope.$new(true);
       var elm = compileDirective('markup-ngClick-service');
-      var myTooltip = $tooltip(sandboxEl, {scope:scope, trigger: 'manual'});
+      var myTooltip = $bsTooltip(sandboxEl, {scope:scope, trigger: 'manual'});
       scope.showTooltip = function() {
         myTooltip.$promise.then(myTooltip.show);
       };
@@ -572,12 +572,12 @@ describe('tooltip', function() {
     });
 
     it('should store config id value in instance', function() {
-      var myTooltip = $tooltip(sandboxEl, {scope:scope, trigger: 'manual', id: 'instance1'});
+      var myTooltip = $bsTooltip(sandboxEl, {scope:scope, trigger: 'manual', id: 'instance1'});
       expect(myTooltip.$id).toBe('instance1');
     });
 
     it('should fallback to element id value when id is not provided in config', function() {
-      var myTooltip = $tooltip(sandboxEl, {scope:scope, trigger: 'manual'});
+      var myTooltip = $bsTooltip(sandboxEl, {scope:scope, trigger: 'manual'});
       expect(myTooltip.$id).toBe('sandbox');
     });
 
@@ -640,7 +640,7 @@ describe('tooltip', function() {
   describe('show / hide events', function() {
 
     it('should dispatch show and show.before events', function() {
-      var myTooltip = $tooltip(sandboxEl, templates['default'].scope.tooltip);
+      var myTooltip = $bsTooltip(sandboxEl, templates['default'].scope.tooltip);
       var emit = spyOn(myTooltip.$scope, '$emit');
       scope.$digest();
       myTooltip.show();
@@ -653,7 +653,7 @@ describe('tooltip', function() {
     });
 
     it('should invoke show and beforeShow event callbacks', function() {
-      var myTooltip = $tooltip(sandboxEl, {
+      var myTooltip = $bsTooltip(sandboxEl, {
         onShow: function(tooltip) {},
         onBeforeShow: function(tooltip) {}
       });
@@ -670,7 +670,7 @@ describe('tooltip', function() {
     });
 
     it('should dispatch hide and hide.before events', function() {
-      var myTooltip = $tooltip(sandboxEl, templates['default'].scope.tooltip);
+      var myTooltip = $bsTooltip(sandboxEl, templates['default'].scope.tooltip);
       scope.$digest();
       myTooltip.show();
 
@@ -685,7 +685,7 @@ describe('tooltip', function() {
     });
 
     it('should invoke hide and beforeHide event callbacks', function() {
-      var myTooltip = $tooltip(sandboxEl, {
+      var myTooltip = $bsTooltip(sandboxEl, {
         onHide: function(tooltip) {},
         onBeforeHide: function(tooltip) {}
       });
@@ -775,7 +775,7 @@ describe('tooltip', function() {
     });
 
     it('should namespace show/hide events using the prefixEvent', function() {
-      var myTooltip = $tooltip(sandboxEl, angular.extend({prefixEvent: 'datepicker'}, templates['default'].scope.tooltip));
+      var myTooltip = $bsTooltip(sandboxEl, angular.extend({prefixEvent: 'datepicker'}, templates['default'].scope.tooltip));
       var emit = spyOn(myTooltip.$scope, '$emit');
       scope.$digest();
       myTooltip.show();
@@ -789,7 +789,7 @@ describe('tooltip', function() {
     });
 
     it('should be invisible until it is positioned', inject(function ($$rAF) {
-      var myTooltip = $tooltip(sandboxEl, templates['default'].scope.tooltip);
+      var myTooltip = $bsTooltip(sandboxEl, templates['default'].scope.tooltip);
       scope.$digest();
       myTooltip.show();
 
@@ -863,7 +863,7 @@ describe('tooltip', function() {
     describe('keyboard', function() {
 
       it('should dismiss and stopPropagation if ESC is pressed when trigger !== "focus"', function() {
-        var myTooltip = $tooltip(sandboxEl, angular.extend({trigger: 'click'}, templates['options-keyboard'].scope.tooltip));
+        var myTooltip = $bsTooltip(sandboxEl, angular.extend({trigger: 'click'}, templates['options-keyboard'].scope.tooltip));
         scope.$digest();
         expect(bodyEl.children('.tooltip').length).toBe(0);
         myTooltip.show();
@@ -876,7 +876,7 @@ describe('tooltip', function() {
       });
 
       it('should NOT stopPropagation if ESC is pressed while tooltip is hidden', function() {
-        var myTooltip = $tooltip(sandboxEl, angular.extend({trigger: 'click'}, templates['options-keyboard'].scope.tooltip));
+        var myTooltip = $bsTooltip(sandboxEl, angular.extend({trigger: 'click'}, templates['options-keyboard'].scope.tooltip));
         scope.$digest();
         var evt = jQuery.Event( 'keyup', { keyCode: 27, which: 27 } );
         spyOn(evt, 'stopPropagation');
@@ -885,7 +885,7 @@ describe('tooltip', function() {
       });
 
       it('should blur and stopPropagation if ESC is pressed when trigger === "focus"', function() {
-        var myTooltip = $tooltip(sandboxEl, angular.extend({trigger: 'focus'}, templates['options-keyboard'].scope.tooltip));
+        var myTooltip = $bsTooltip(sandboxEl, angular.extend({trigger: 'focus'}, templates['options-keyboard'].scope.tooltip));
         spyOn(sandboxEl[0], 'blur');
         var evt = jQuery.Event( 'keyup', { keyCode: 27, which: 27 } );
         spyOn(evt, 'stopPropagation');
@@ -1074,7 +1074,7 @@ describe('tooltip', function() {
       it('accepts element object', function() {
         var testElm = angular.element('<div></div>');
         sandboxEl.append(testElm);
-        var myTooltip = $tooltip(sandboxEl, angular.extend({}, templates['default'].scope.tooltip, {container: testElm}));
+        var myTooltip = $bsTooltip(sandboxEl, angular.extend({}, templates['default'].scope.tooltip, {container: testElm}));
         scope.$digest();
         myTooltip.show();
         $animate.flush();
@@ -1103,7 +1103,7 @@ describe('tooltip', function() {
 
     describe('viewport', function () {
       it('should default the viewport to body with a padding of 0 when not set', function () {
-        var myTooltip = $tooltip(sandboxEl, {});
+        var myTooltip = $bsTooltip(sandboxEl, {});
         var tipOptions = myTooltip.$options;
 
         expect(tipOptions.viewport.selector).toBe('body');
@@ -1112,7 +1112,7 @@ describe('tooltip', function() {
 
       it('should support using an element', function () {
         var myViewport = angular.element(document.createElement('div'));
-        var myTooltip = $tooltip(sandboxEl, { viewport: myViewport });
+        var myTooltip = $bsTooltip(sandboxEl, { viewport: myViewport });
         var tipOptions = myTooltip.$options;
 
         expect(tipOptions.viewport).toBe(myViewport);
@@ -1120,7 +1120,7 @@ describe('tooltip', function() {
 
       it('should support specifying a selector and padding', function () {
         var myViewport = { selector: '#someSelector', padding: 100 };
-        var myTooltip = $tooltip(sandboxEl, { viewport: myViewport });
+        var myTooltip = $bsTooltip(sandboxEl, { viewport: myViewport });
         var tipOptions = myTooltip.$options;
 
         expect(tipOptions.viewport.selector).toBe('#someSelector');

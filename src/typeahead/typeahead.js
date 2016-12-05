@@ -23,7 +23,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
       trimValue: true
     };
 
-    this.$get = function ($window, $rootScope, $tooltip, $$rAF, $timeout) {
+    this.$get = function ($window, $rootScope, $bsTooltip, $$rAF, $timeout) {
 
       function TypeaheadFactory (element, controller, config) {
 
@@ -32,7 +32,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         // Common vars
         var options = angular.extend({}, defaults, config);
 
-        $typeahead = $tooltip(element, options);
+        $typeahead = $bsTooltip(element, options);
         var parentScope = config.scope;
         var scope = $typeahead.$scope;
 

@@ -44,7 +44,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
       iconRight: 'glyphicon glyphicon-chevron-right'
     };
 
-    this.$get = function ($window, $document, $rootScope, $sce, $dateFormatter, datepickerViews, $tooltip, $timeout) {
+    this.$get = function ($window, $document, $rootScope, $sce, $dateFormatter, datepickerViews, $bsTooltip, $timeout) {
 
       var isNative = /(ip[ao]d|iphone|android)/ig.test($window.navigator.userAgent);
       var isTouch = ('createTouch' in $window.document) && isNative;
@@ -52,7 +52,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
 
       function DatepickerFactory (element, controller, config) {
 
-        var $datepicker = $tooltip(element, angular.extend({}, defaults, config));
+        var $datepicker = $bsTooltip(element, angular.extend({}, defaults, config));
         var parentScope = config.scope;
         var options = $datepicker.$options;
         var scope = $datepicker.$scope;

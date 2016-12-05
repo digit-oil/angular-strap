@@ -31,13 +31,13 @@ angular.module('mgcrea.ngStrap.select', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.ngSt
     iconCheckmark: 'glyphicon glyphicon-ok',
     toggle: false
   };
-  this.$get = [ '$window', '$document', '$rootScope', '$tooltip', '$timeout', function($window, $document, $rootScope, $tooltip, $timeout) {
+  this.$get = [ '$window', '$document', '$rootScope', '$bsTooltip', '$timeout', function($window, $document, $rootScope, $bsTooltip, $timeout) {
     var isNative = /(ip[ao]d|iphone|android)/gi.test($window.navigator.userAgent);
     var isTouch = 'createTouch' in $window.document && isNative;
     function SelectFactory(element, controller, config) {
       var $select = {};
       var options = angular.extend({}, defaults, config);
-      $select = $tooltip(element, options);
+      $select = $bsTooltip(element, options);
       var scope = $select.$scope;
       scope.$matches = [];
       if (options.multiple) {

@@ -28,7 +28,7 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
       toggle: false
     };
 
-    this.$get = function ($window, $document, $rootScope, $tooltip, $timeout) {
+    this.$get = function ($window, $document, $rootScope, $bsTooltip, $timeout) {
 
       // var bodyEl = angular.element($window.document.body);
       var isNative = /(ip[ao]d|iphone|android)/ig.test($window.navigator.userAgent);
@@ -41,7 +41,7 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
         // Common vars
         var options = angular.extend({}, defaults, config);
 
-        $select = $tooltip(element, options);
+        $select = $bsTooltip(element, options);
         var scope = $select.$scope;
 
         scope.$matches = [];
